@@ -1,0 +1,48 @@
+<div class="center">
+  <div>
+    <h2>Starting Array (Defined by DM)</h2>
+    <section>
+    <mat-form-field floatLabel="always">
+      <mat-label>Strength</mat-label>
+      <input matInput #baseStr [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>fitness_center</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Dexterity</mat-label>
+      <input matInput #baseDex [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>directions_run</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Constitution</mat-label>
+      <input matInput #baseCon [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>favorite</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Intelligence</mat-label>
+      <input matInput #baseInt [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>school</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Wisdom</mat-label>
+      <input matInput #baseWis [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>psychology</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+      <mat-label>Charisma</mat-label>
+      <input matInput #baseCha [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
+      <mat-icon matSuffix>record_voice_over</mat-icon>
+    </mat-form-field>
+    </section>
+    <button mat-button color="primary"
+            type="submit"
+            *ngIf="!baseArrayCompleted"
+            (click)=OnClick(baseStr.valueAsNumber,baseDex.valueAsNumber,baseCon.valueAsNumber,baseInt.valueAsNumber,baseWis.valueAsNumber,baseCha.valueAsNumber)
+    >Lock</button>
+  </div>
+</div>
+
