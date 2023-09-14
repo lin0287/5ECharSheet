@@ -1,48 +1,305 @@
-<div class="center">
-  <div>
-    <h2>Starting Array (Defined by DM)</h2>
-    <section>
-    <mat-form-field floatLabel="always">
-      <mat-label>Strength</mat-label>
-      <input matInput #baseStr [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>fitness_center</mat-icon>
-    </mat-form-field>
+<mat-stepper #stepper orientation="vertical">
+  <mat-step [stepControl]="StandardArrayFormGroup">
+    <form [formGroup]="StandardArrayFormGroup">
+      <ng-template matStepLabel>Standard Array (Set by DM)</ng-template>
+      <ng-template matStepContent>
+        <mat-grid-list cols="3" rowHeight="6em">
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Strength</mat-label>
+              <input #baseStr formControlName="baseStr" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>fitness_center</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseStr')?.hasError('invalidValue')">
+                Strength must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Dexterity</mat-label>
+              <input #baseDex formControlName="baseDex" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>directions_run</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseDex')?.hasError('invalidValue')">
+                Dexterity must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Constitution</mat-label>
+              <input #baseCon formControlName="baseCon" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>favorite</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseCon')?.hasError('invalidValue')">
+                Constitution must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Intelligence</mat-label>
+              <input #baseInt formControlName="baseInt" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>school</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseInt')?.hasError('invalidValue')">
+                Intelligence must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Wisdom</mat-label>
+              <input #baseWis formControlName="baseWis" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>psychology</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseWis')?.hasError('invalidValue')">
+                Wisdom must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field floatLabel="always">
+              <mat-label>Charisma</mat-label>
+              <input #baseCha formControlName="baseCha" matInput
+                     max=20 min=0 required type="number">
+              <mat-icon matSuffix>record_voice_over</mat-icon>
+              <mat-error *ngIf="StandardArrayFormGroup.get('baseCha')?.hasError('invalidValue')">
+                Charisma must be 1-20.
+              </mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </ng-template>
+    </form>
+  </mat-step>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>Dexterity</mat-label>
-      <input matInput #baseDex [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>directions_run</mat-icon>
-    </mat-form-field>
+  <mat-step [stepControl]="PlayerRaceFormGroup">
+    <form [formGroup]="PlayerRaceFormGroup">
+      <ng-template matStepLabel>Select Player Race</ng-template>
+      <ng-template matStepContent>
+        <mat-grid-list cols="2" rowHeight="6em">
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Player Race</mat-label>
+              <input [matAutocomplete]="auto"
+                     formControlName="selectedRace"
+                     matInput
+                     placeholder="Pick one"
+                     type="text">
+              <mat-autocomplete #auto="matAutocomplete"
+                                (optionSelected)="onRaceSelected($event)">
+                <mat-option *ngFor="let option of RaceOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>Constitution</mat-label>
-      <input matInput #baseCon [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>favorite</mat-icon>
-    </mat-form-field>
+          <mat-grid-tile *ngIf="selectedRace && SubRaceOptions?.children">
+            <mat-form-field>
+              <mat-label>Player Subrace</mat-label>
+              <input [matAutocomplete]="auto"
+                     formControlName="selectedSubRace"
+                     matInput
+                     placeholder="Pick one"
+                     type="text">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option2 of SubRaceOptions?.children" [value]="option2.name">
+                  {{ option2.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field *ngIf="playerSelectedBonus">
+              <mat-label>+2 Stat</mat-label>
+              <input [matAutocomplete]="auto"
+                     formControlName="mainRaceBonus"
+                     matInput
+                     placeholder="Pick one"
+                     type="text">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Str'"
+                            value="Str"
+                >Str
+                  <mat-icon matSuffix>fitness_center</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Dex'"
+                            value="Dex"
+                >Dex
+                  <mat-icon matSuffix>directions_run</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Con'"
+                            value="Con"
+                >Con
+                  <mat-icon matSuffix>favorite</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Int'"
+                            value="Int"
+                >Int
+                  <mat-icon matSuffix>school</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Wis'"
+                            value="Wis"
+                >Wis
+                  <mat-icon matSuffix>psychology</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('secondaryRaceBonus')?.value !='Cha'"
+                            value="Cha"
+                >Cha
+                  <mat-icon matSuffix>record_voice_over</mat-icon>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field *ngIf="playerSelectedBonus">
+              <mat-label>+1 Stat</mat-label>
+              <input [matAutocomplete]="auto"
+                     formControlName="secondaryRaceBonus"
+                     matInput
+                     placeholder="Pick one"
+                     type="text">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Str'"
+                            value="Str"
+                >Str
+                  <mat-icon matSuffix>fitness_center</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Dex'"
+                            value="Dex"
+                >Dex
+                  <mat-icon matSuffix>directions_run</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Con'"
+                            value="Con"
+                >Con
+                  <mat-icon matSuffix>favorite</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Int'"
+                            value="Int"
+                >Int
+                  <mat-icon matSuffix>school</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Wis'"
+                            value="Wis"
+                >Wis
+                  <mat-icon matSuffix>psychology</mat-icon>
+                </mat-option>
+                <mat-option *ngIf="PlayerRaceFormGroup.get('mainRaceBonus')?.value !='Cha'"
+                            value="Cha"
+                >Cha
+                  <mat-icon matSuffix>record_voice_over</mat-icon>
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>Intelligence</mat-label>
-      <input matInput #baseInt [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>school</mat-icon>
-    </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </ng-template>
+    </form>
+  </mat-step>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>Wisdom</mat-label>
-      <input matInput #baseWis [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>psychology</mat-icon>
-    </mat-form-field>
+  <mat-step [stepControl]="BasicInformationFormGroup">
+    <form [formGroup]="BasicInformationFormGroup">
+      <ng-template matStepLabel>Basic Information</ng-template>
+      <ng-template matStepContent>
 
-    <mat-form-field floatLabel="always">
-      <mat-label>Charisma</mat-label>
-      <input matInput #baseCha [disabled]="baseArrayCompleted" type="number" min=0 max=20 placeholder=0 required>
-      <mat-icon matSuffix>record_voice_over</mat-icon>
-    </mat-form-field>
-    </section>
-    <button mat-button color="primary"
-            type="submit"
-            *ngIf="!baseArrayCompleted"
-            (click)=OnClick(baseStr.valueAsNumber,baseDex.valueAsNumber,baseCon.valueAsNumber,baseInt.valueAsNumber,baseWis.valueAsNumber,baseCha.valueAsNumber)
-    >Lock</button>
-  </div>
-</div>
+        <mat-grid-list cols="3" rowHeight="6em">
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>First Name</mat-label>
+              <input formControlName="firstName" matInput placeholder="First name" required>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Last Name</mat-label>
+              <input formControlName="lastName" matInput placeholder="Last name" required>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Age</mat-label>
+              <input formControlName="Age" matInput placeholder="Age" required type="number">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Class</mat-label>
+              <mat-select formControlName="playerClass" required>
+                <mat-option value="Paladin">Paladin</mat-option>
+                <mat-option value="Sorcerer">Sorcerer</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Lawful-Chaotic</mat-label>
+              <mat-select formControlName="LawfulChaotic" required>
+                <mat-option value="Lawful">Lawful</mat-option>
+                <mat-option value="Neutral">Neutral</mat-option>
+                <mat-option value="Chaotic">Chaotic</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field>
+              <mat-label>Good-Evil</mat-label>
+              <mat-select formControlName="GoodEvil" required>
+                <mat-option value="Good">Good</mat-option>
+                <mat-option value="Neutral">Neutral</mat-option>
+                <mat-option value="Evil">Evil</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+        </mat-grid-list>
 
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext (click)="summarizeEntries()">Next</button>
+        </div>
+      </ng-template>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Confirmation</ng-template>
+    <ng-template matStepContent>
+    <div>
+      <h3><strong>Character Information Summary</strong></h3>
+      <p><strong>First Name:</strong> {{ firstName }}</p>
+      <p><strong>Last Name:</strong> {{ lastName }}</p>
+      <p><strong>Age:</strong> {{ Age }}</p>
+      <p><strong>Class:</strong> {{ playerClass }}</p>
+      <p><strong>Alignment:</strong> {{ LawfulChaotic +" " + GoodEvil}}</p>
+
+      <h3><strong>Player Race Information</strong></h3>
+      <p><strong>Selected Race:</strong> {{ selectedRace }}</p>
+      <p><strong>Selected Subrace:</strong> {{ playerSubRace }}</p>
+
+      <h3><strong>Stats</strong></h3>
+      <p><strong>Strength:</strong> {{ strength }}</p>
+      <p><strong>Dexterity:</strong> {{ dexterity }}</p>
+      <p><strong>Constitution:</strong> {{ constitution }}</p>
+      <p><strong>Intelligence:</strong> {{ intelligence }}</p>
+      <p><strong>Wisdom:</strong> {{ wisdom }}</p>
+      <p><strong>Charisma:</strong> {{ charisma }}</p>
+    </div>
+
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button>Submit</button>
+    </div>
+    </ng-template>
+  </mat-step>
+</mat-stepper>

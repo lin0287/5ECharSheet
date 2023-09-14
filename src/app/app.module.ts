@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { BasicDetailsComponent } from './basic-details/basic-details.component';
 import {RouterModule} from "@angular/router";
 import { FeatsTraitsComponent } from './feats-traits/feats-traits.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -51,6 +50,10 @@ import {MatSliderModule} from "@angular/material/slider";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatDividerModule} from "@angular/material/divider";
 import { SpellsComponent } from './spells/spells.component';
+import {StoreModule} from "@ngrx/store";
+import {RootState} from "./state/app.state";
+import { BasicDetailsComponent } from './basic-details/basic-details.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   exports: [
@@ -105,9 +108,9 @@ import { SpellsComponent } from './spells/spells.component';
   ],
   declarations: [
     AppComponent,
-    BasicDetailsComponent,
     FeatsTraitsComponent,
-    SpellsComponent
+    SpellsComponent,
+    BasicDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -131,6 +134,7 @@ import { SpellsComponent } from './spells/spells.component';
     MatMenuModule,
     MatNativeDateModule,
     MatPaginatorModule,
+    ReactiveFormsModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
@@ -141,11 +145,14 @@ import { SpellsComponent } from './spells/spells.component';
     MatSlideToggleModule,
     MatSnackBarModule,
     MatSortModule,
+    MatAutocompleteModule,
+    FormsModule,
     MatStepperModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    CdkTreeModule,
     MatTreeModule,
     RouterModule.forRoot([
       {path: 'basic-details', component: BasicDetailsComponent},
