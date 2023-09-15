@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": "https://lin0287.github.io/5echarsheet",
-            "outputPath": "docs",
+            "outputPath": "root",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
