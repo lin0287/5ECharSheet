@@ -158,7 +158,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
       {path: 'basic-details', component: BasicDetailsComponent},
       {path: 'feats-traits', component: FeatsTraitsComponent},
       {path: 'spells', component: SpellsComponent},
-      {path: '', redirectTo: '/basic-details', pathMatch: 'full'},
+      {path: '', redirectTo: 'basic-details', pathMatch: 'full'},
       {path: '**', component: BasicDetailsComponent}
     ]),
     BrowserAnimationsModule,
